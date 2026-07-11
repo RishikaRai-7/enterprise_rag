@@ -1,0 +1,59 @@
+# ==========================
+# API
+# ==========================
+fastapi
+uvicorn[standard]
+python-dotenv
+
+# ==========================
+# LLM
+# ==========================
+google-generativeai
+
+# ==========================
+# Embeddings
+# ==========================
+sentence-transformers
+
+# ==========================
+# Vector Database
+# ==========================
+chromadb
+
+# ==========================
+# Document Loading
+# ==========================
+langchain
+langchain-community
+langchain-text-splitters
+
+pymupdf
+beautifulsoup4
+markdown
+
+# ==========================
+# Sparse Retrieval
+# ==========================
+rank-bm25
+
+# ==========================
+# ML Utilities
+# ==========================
+numpy
+pandas
+scikit-learn
+
+# ==========================
+# Dashboard
+# ==========================
+streamlit
+
+# ==========================
+# Progress Bars
+# ==========================
+tqdm
+
+# ==========================
+# Testing
+# ==========================
+pytest
