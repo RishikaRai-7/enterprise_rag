@@ -7,6 +7,7 @@ from torch import chunk
 from tqdm import tqdm
 from langchain_core.documents import Document
 
+from app.database.vector_store import VectorStore
 from app.database.chroma import ChromaVectorStore
 from app.ingestion.chunker import Chunker
 from app.ingestion.embeddings import embedding_service
@@ -15,6 +16,7 @@ from app.models.document import (
     ChunkingStrategy,
     DocumentChunk,
 )
+from app.retrieval.sparse_index import SparseIndex
 
 class Indexer:
     """
@@ -28,13 +30,27 @@ class Indexer:
     - Store vectors
     """
 
-    def __init__(self):
+def __init__(
+    self,
+    vector_store: VectorStore | None = None,
+    sparse_index: RetrievalIndex | None = None,
+):
 
-        self.loader = DocumentLoader()
+    self.loader = DocumentLoader()
 
-        self.chunker = Chunker()
+    self.chunker = Chunker()
 
-        self.vector_store = ChromaVectorStore()
+    self.vector_store = (
+        vector_store
+        if vector_store is not None
+        else ChromaVectorStore()
+    )
+
+    self.sparse_index = (
+        sparse_index
+        if sparse_index is not None
+        else SparseIndex()
+    )
 
     def _create_document_chunk(
         self,
@@ -142,6 +158,22 @@ class Indexer:
             ],
         )
 
+        self.sparse_index.add_documents(
+
+            ids=[
+                c.id
+                for c in document_chunks
+            ],
+
+            documents=texts,
+
+            metadatas=[
+                self._prepare_metadata(chunk)
+                for chunk in document_chunks
+            ],
+
+        )
+
         elapsed = time.time() - start_time
 
         print(
@@ -149,3 +181,84 @@ class Indexer:
             f"in {elapsed:.2f} sec.\n"
         )
         return document_chunks
+    
+    def index_directory(
+    self,
+    directory: str,
+    strategy: ChunkingStrategy = ChunkingStrategy.RECURSIVE,
+):
+        """
+        Index every supported document inside a folder.
+        """
+
+        directory = Path(directory)
+
+        if not directory.exists():
+            raise FileNotFoundError(
+                f"{directory} does not exist."
+            )
+
+        files = [
+
+            file
+
+            for file in directory.rglob("*")
+
+            if file.is_file()
+
+        ]
+
+        indexed = 0
+
+        skipped = 0
+
+        total_chunks = 0
+
+        start_time = time.time()
+
+        for file in tqdm(
+            files,
+            desc="Indexing Documents",
+        ):
+
+            try:
+
+                chunks = self.index_document(
+                    str(file),
+                    strategy,
+                )
+
+                indexed += 1
+
+                total_chunks += len(chunks)
+
+            except ValueError:
+
+                skipped += 1
+
+            except Exception as e:
+
+                skipped += 1
+
+                print(
+                    f"❌ {file.name}: {e}"
+                )
+
+        elapsed = time.time() - start_time
+
+        print(" INGESTION SUMMARY")
+        print(f"Indexed Files : {indexed}")
+        print(f"Skipped Files : {skipped}")
+        print(f"Total Chunks  : {total_chunks}")
+        print(f"Elapsed Time  : {elapsed:.2f} sec")
+
+    def get_stats(self):
+        """
+        Return collection statistics.
+        """
+
+        return {
+
+            "total_chunks": self.vector_store.count()
+
+        }
