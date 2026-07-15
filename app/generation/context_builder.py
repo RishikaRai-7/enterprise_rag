@@ -40,7 +40,7 @@ class ContextBuilder:
         prompt = "\n\n".join(formatted_chunks)
 
         return PromptContext(
-            prompt=prompt,
+            formatted_context=prompt,
             formatted_chunks=formatted_chunks,
             citations=citations,
         )

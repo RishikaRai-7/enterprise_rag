@@ -3,10 +3,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# ==========================
-# API Keys
-# ==========================
+
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+GEMINI_MODEL = os.getenv(
+    "GEMINI_MODEL",
+    "gemini-2.5-flash",
+)
 
 # ==========================
 # Database
@@ -22,6 +25,14 @@ CHROMA_DB_PATH = os.getenv(
 EMBEDDING_MODEL = os.getenv(
     "EMBEDDING_MODEL",
     "BAAI/bge-small-en-v1.5"
+)
+
+# ==========================
+# Cross Encoder
+# ==========================
+CROSS_ENCODER_MODEL = os.getenv(
+    "CROSS_ENCODER_MODEL",
+    "cross-encoder/ms-marco-MiniLM-L-6-v2"
 )
 
 # ==========================

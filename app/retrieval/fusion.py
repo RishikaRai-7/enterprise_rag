@@ -4,7 +4,7 @@ from typing import List
 from app.models.retrieval import RetrievalResult
 
 
-class ReciprocalRankFusion:
+class WeightedReciprocalRankFusion:
 
     def __init__(self, k: int = 60):
         self.k = k

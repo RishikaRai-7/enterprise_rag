@@ -3,7 +3,7 @@ from typing import List
 import chromadb
 
 from app.config.settings import CHROMA_DB_PATH
-from app.database.vector_store import VectorStore
+from app.database.interfaces import VectorStore
 from app.models.retrieval import RetrievalResult
 
 

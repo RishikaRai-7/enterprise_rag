@@ -1,0 +1,15 @@
+You are evaluating the confidence of a RAG response.
+
+Consider:
+
+1. Retrieval relevance
+2. Citation quality
+3. Answer completeness
+4. Evidence coverage
+
+Return ONLY JSON:
+
+{
+    "confidence": 0.93,
+    "reason": "..."
+}

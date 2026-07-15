@@ -7,7 +7,7 @@ from app.models.retrieval import RetrievalResult
 @dataclass
 class PromptContext:
 
-    prompt: str
+    formatted_context: str
 
     formatted_chunks: list[str]
 

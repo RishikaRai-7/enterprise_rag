@@ -1,7 +1,7 @@
 from typing import List
 
 from app.models.retrieval import RetrievalResult
-from app.retrieval.cross_encoder_service import (
+from app.services.cross_encoder_service import (
     cross_encoder_service,
 )
 

@@ -1,8 +1,8 @@
 from typing import List
 
 from app.database.chroma import ChromaVectorStore
-from app.database.vector_store import VectorStore
-from app.ingestion.embeddings import embedding_service
+from app.database.interfaces import VectorStore
+from app.services.embedding_service import embedding_service
 from app.models.retrieval import RetrievalResult
 
 

@@ -1,35 +1,60 @@
-from typing import List, Tuple
+from typing import List
 
 from sentence_transformers import CrossEncoder
+
+from app.config.settings import CROSS_ENCODER_MODEL
 
 
 class CrossEncoderService:
     """
-    Singleton service responsible for loading and
-    scoring sentence pairs using a Cross Encoder model.
+    Service responsible for reranking retrieved documents.
+
+    The model is loaded lazily on the first request.
     """
 
-    def __init__(
-        self,
-        model_name: str = "cross-encoder/ms-marco-MiniLM-L-6-v2",
-    ):
-        print(f"Loading Cross Encoder: {model_name}")
+    def __init__(self):
+        self.model = None
 
-        self.model = CrossEncoder(model_name)
+    def _get_model(self) -> CrossEncoder:
+        """
+        Lazily load the Cross Encoder model.
+        """
 
-        print("Cross Encoder loaded successfully.")
+        if self.model is None:
+
+            print(
+                f"Loading Cross Encoder model: {CROSS_ENCODER_MODEL}"
+            )
+
+            self.model = CrossEncoder(
+                CROSS_ENCODER_MODEL
+            )
+
+            print(
+                "Cross Encoder model loaded successfully."
+            )
+
+        return self.model
 
     def score(
         self,
-        sentence_pairs: List[Tuple[str, str]],
+        query: str,
+        documents: List[str],
     ) -> List[float]:
         """
-        Returns relevance scores for (query, document) pairs.
+        Computes relevance scores for a query-document pair.
         """
 
-        scores = self.model.predict(sentence_pairs)
+        model = self._get_model()
 
-        return [float(score) for score in scores]
+        pairs = [
+            (query, document)
+            for document in documents
+        ]
+
+        scores = model.predict(pairs)
+
+        return scores.tolist()
 
 
 cross_encoder_service = CrossEncoderService()
