@@ -24,7 +24,8 @@ class EmbeddingService:
             )
 
             self.model = SentenceTransformer(
-                EMBEDDING_MODEL
+                EMBEDDING_MODEL,
+                device = "cpu",
             )
 
             print(
@@ -42,9 +43,10 @@ class EmbeddingService:
 
         embeddings = model.encode(
             texts,
+            batch_size=8,
             convert_to_numpy=True,
             normalize_embeddings=True,
-            show_progress_bar=True,
+            show_progress_bar=False,
         )
 
         return embeddings.tolist()

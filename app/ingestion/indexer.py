@@ -128,15 +128,26 @@ class Indexer:
             in enumerate(chunks)
 
         ]
-
         texts = [
             chunk.text
             for chunk in document_chunks
         ]
 
-        embeddings = embedding_service.embed_documents(
-            texts
-        )
+        embeddings = []
+
+        BATCH_SIZE = 8
+
+        for i in range(0, len(texts), BATCH_SIZE):
+            print(
+                f"Embedding batch {i//BATCH_SIZE + 1}/"
+                f"{(len(texts)+BATCH_SIZE-1)//BATCH_SIZE}"
+            )
+
+            batch = texts[i:i+BATCH_SIZE]
+
+            embeddings.extend(
+                embedding_service.embed_documents(batch)
+            )
 
         metadata = [
             self._prepare_metadata(chunk)

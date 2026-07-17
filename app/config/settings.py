@@ -24,7 +24,7 @@ CHROMA_DB_PATH = os.getenv(
 # ==========================
 EMBEDDING_MODEL = os.getenv(
     "EMBEDDING_MODEL",
-    "BAAI/bge-small-en-v1.5"
+    "sentence-transformers/all-MiniLM-L6-v2"
 )
 
 # ==========================
