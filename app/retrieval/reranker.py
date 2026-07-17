@@ -26,16 +26,14 @@ class CrossEncoderReranker:
         if not results:
             return []
 
-        sentence_pairs = [
-
-            (query, result.document)
-
+        documents = [
+            result.document
             for result in results
-
         ]
 
         scores = cross_encoder_service.score(
-            sentence_pairs
+            query,
+            documents,
         )
 
         reranked_results = []

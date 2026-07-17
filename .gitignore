@@ -31,3 +31,6 @@ Thumbs.db
 
 # Model Cache
 .cache/
+
+uploads/*
+!uploads/.gitkeep

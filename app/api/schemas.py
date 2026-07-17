@@ -12,11 +12,12 @@ class AskRequest(BaseModel):
         description="User question."
     )
 
+class SourceResponse(BaseModel):
+    title: str
+    score: float | None = None
+
 
 class AskResponse(BaseModel):
-    """
-    Response returned by the RAG system.
-    """
 
     answer: str
 
@@ -25,6 +26,12 @@ class AskResponse(BaseModel):
     model: str | None
 
     latency_ms: float | None
+
+    retrieved_chunks: int
+
+    citations: int
+
+    sources: list[SourceResponse]
 
 
 class IngestRequest(BaseModel):

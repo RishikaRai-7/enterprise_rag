@@ -2,6 +2,7 @@ import time
 import uuid
 from pathlib import Path
 
+from torch import chunk
 from tqdm import tqdm
 from langchain_core.documents import Document
 
@@ -77,18 +78,24 @@ class Indexer:
         )
 
     def _prepare_metadata(
-        self,
-        chunk: DocumentChunk,
-    ) -> dict:
+    self,
+    chunk: DocumentChunk,
+) -> dict:
 
-        return {
-            "source": chunk.source,
-            "page": chunk.page,
-            "section": chunk.section,
-            "chunk_index": chunk.chunk_index,
-            "strategy": chunk.strategy.value,
-            "char_count": chunk.char_count,
+        metadata = {
+            "source": str(chunk.source),
+            "chunk_index": int(chunk.chunk_index),
+            "strategy": str(chunk.strategy.value),
+            "char_count": int(chunk.char_count),
         }
+
+        if chunk.page is not None:
+            metadata["page"] = int(chunk.page)
+
+        if chunk.section is not None:
+            metadata["section"] = str(chunk.section)
+
+        return metadata
 
     # --------------------------------------------------
     # Public API

@@ -3,10 +3,7 @@ from app.generation.prompt_builder import PromptBuilder
 from app.generation.quality_pipeline import QualityPipeline
 from app.models.generation import GenerationResult
 from app.retrieval.pipeline import RetrievalPipeline
-from app.services.gemini_service import (
-    GeminiService,
-    gemini_service,
-)
+from app.services.llm_service import LLMService, llm_service
 
 
 class Generator:
@@ -20,7 +17,7 @@ class Generator:
         context_builder: ContextBuilder | None = None,
         prompt_builder: PromptBuilder | None = None,
         quality_pipeline: QualityPipeline | None = None,
-        llm_service: GeminiService | None = None,
+        llm_service_instance: LLMService | None = None,
     ):
 
         self.retrieval_pipeline = (
@@ -48,9 +45,9 @@ class Generator:
         )
 
         self.llm_service = (
-            llm_service
-            if llm_service is not None
-            else gemini_service
+            llm_service_instance
+            if llm_service_instance is not None
+            else llm_service
         )
 
     def generate(

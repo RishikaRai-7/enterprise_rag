@@ -3,10 +3,7 @@ import json
 from app.generation.prompt_builder import PromptBuilder
 from app.models.citation import CitationResult
 from app.models.context import PromptContext
-from app.services.gemini_service import (
-    GeminiService,
-    gemini_service,
-)
+from app.services.llm_service import LLMService, llm_service
 
 
 class CitationVerifier:
@@ -17,7 +14,7 @@ class CitationVerifier:
     def __init__(
         self,
         prompt_builder: PromptBuilder | None = None,
-        llm_service: GeminiService | None = None,
+        llm_service_instance: LLMService | None = None,
     ):
 
         self.prompt_builder = (
@@ -27,9 +24,9 @@ class CitationVerifier:
         )
 
         self.llm_service = (
-            llm_service
-            if llm_service
-            else gemini_service
+            llm_service_instance
+            if llm_service_instance is not None
+            else llm_service
         )
 
     def verify(

@@ -54,7 +54,7 @@ class EnterpriseRAG:
             ChunkingStrategy.RECURSIVE,
         )
 
-        self.indexer.index_document(
+        return self.indexer.index_document(
             file_path=document_path,
             strategy=chunking_strategy,
         )
@@ -76,7 +76,7 @@ class EnterpriseRAG:
             ChunkingStrategy.RECURSIVE,
         )
 
-        self.indexer.index_directory(
+        return self.indexer.index_directory(
             directory=directory,
             strategy=chunking_strategy,
         )

@@ -10,6 +10,7 @@ python-dotenv
 # ==========================
 google-generativeai
 google-genai
+openai 
 
 # ==========================
 # Embeddings
